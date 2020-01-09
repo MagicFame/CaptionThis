@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 
+// First screen
 public class MainActivity extends AppCompatActivity {
 
     @Override

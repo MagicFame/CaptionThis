@@ -1,5 +1,6 @@
 package com.magicfame.captionthis;
 
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.media.Image;
 import android.media.ImageReader;
@@ -9,14 +10,19 @@ import android.util.Size;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class LiveCameraActivity extends BaseCameraActivity implements ImageReader.OnImageAvailableListener {
-    private static final Size DESIRED_PREVIEW_SIZE = new Size(1280, 960);
+    private static final Size DESIRED_PREVIEW_SIZE = new Size(1000, 600);
 
     private AtomicBoolean computing = new AtomicBoolean(false);
+
+    // 1 is for calibrage
+    private int type;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupPredictor();
+        Intent intent = getIntent();
+        type = intent.getIntExtra("type", 0);
     }
 
     protected abstract void setupPredictor();
@@ -27,6 +33,9 @@ public abstract class LiveCameraActivity extends BaseCameraActivity implements I
 
     protected abstract void showResult(Canvas canvas, Size cameraViewSize);
 
+    protected int getType() {
+        return this.type;
+    }
 
     @Override
     protected int getLayoutId() {

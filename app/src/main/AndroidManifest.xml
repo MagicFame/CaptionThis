@@ -23,6 +23,7 @@
         <activity android:name=".CameraActivity"></activity>
         <activity android:name=".SignIn"></activity>
         <activity android:name=".HomeActivity"></activity>
+        <activity android:name=".Profile"></activity>
         <service
             android:name="ai.fritz.core.FritzCustomModelService"
             android:exported="true"
