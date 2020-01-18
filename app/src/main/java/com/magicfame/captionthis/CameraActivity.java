@@ -1,8 +1,12 @@
 package com.magicfame.captionthis;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.media.Image;
+import android.text.InputType;
 import android.util.Size;
+import android.widget.EditText;
 
 import org.json.JSONArray;
 
@@ -78,33 +82,76 @@ public class CameraActivity extends LiveCameraActivity{
 
     protected void traitementPoint(int type, Pose pose) {
         if(type == 1){
-            Keypoint epauleGauche = null, epauleDroite = null, poignetGauche = null, poignetDroit = null;
+            Keypoint epauleGauche = null,
+                    epauleDroite = null,
+                    poignetGauche = null,
+                    poignetDroit = null,
+                    nez = null,
+                    piedGauche = null,
+                    piedDroit = null;
             Keypoint[] key = pose.getKeypoints();
             for (Keypoint var : key) {
                 if (var.getPartName().compareTo("leftShoulder") == 0) epauleGauche = var;
                 if (var.getPartName().compareTo("rightShoulder") == 0) epauleDroite = var;
                 if (var.getPartName().compareTo("leftWrist") == 0) poignetGauche = var;
                 if (var.getPartName().compareTo("rightWrist") == 0) poignetDroit = var;
-                // System.out.println(var.calculateSquaredDistanceFromCoordinates();
 
+                if (var.getPartName().compareTo("nose") == 0) nez = var;
+                if (var.getPartName().compareTo("leftAnkle ") == 0) piedGauche = var;
+                if (var.getPartName().compareTo("rightAnkle") == 0) piedDroit = var;
+
+                // ET CALCULER LE RATIO
                 if (epauleDroite != null
-                        && epauleDroite.getScore() > 0.7
+                        && epauleDroite.getScore() > 0.8
                         && epauleGauche != null
-                        && epauleGauche.getScore() > 0.7
+                        && epauleGauche.getScore() > 0.8
                         && poignetDroit != null
-                        && poignetDroit.getScore() > 0.7
+                        && poignetDroit.getScore() > 0.8
                         && poignetGauche != null
-                        && poignetGauche.getScore() > 0.7) {
-                    System.out.println(epauleDroite.getScore());
-                    System.out.println(poignetDroit.getScore());
-                    System.out.println(epauleGauche.getScore());
-                    System.out.println(poignetGauche.getScore());
-                    System.out.println("CALCULATION : droite " + sqrt(epauleDroite.calculateSquaredDistanceFromCoordinates(poignetDroit.getPosition())));
-                    System.out.println("CALCULATION : gauche " + sqrt(epauleGauche.calculateSquaredDistanceFromCoordinates(poignetGauche.getPosition())));
-                    finish();
+                        && poignetGauche.getScore() > 0.8
+                        && nez != null
+                        && nez.getScore() > 0.8
+                        && piedGauche != null
+                        && piedDroit != null
+                        && piedDroit.getScore() > 0.6
+                        && piedGauche.getScore() > 0.6) {
+                    System.out.println("OK");
+                    // Moyenne taille en pixel
+                    int taillePixel = (int)
+                            ((sqrt(nez.calculateSquaredDistanceFromCoordinates(piedDroit.getPosition()))
+                            + sqrt(nez.calculateSquaredDistanceFromCoordinates(piedGauche.getPosition()))) / 2);
+
+                    int droit = (int)(sqrt(epauleDroite.calculateSquaredDistanceFromCoordinates(poignetDroit.getPosition())));
+                    int gauche = (int)(sqrt(epauleGauche.calculateSquaredDistanceFromCoordinates(poignetGauche.getPosition())));
+                    alertData(droit, gauche);
                 }
             }
         }
+
+    }
+
+    protected void alertData(int droit, int gauche) {
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        builder1.setTitle("Votre taille réelle");
+
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        builder1.setView(input);
+        //builder1.setMessage("Distance bras droite : " + droit + " et distance bras gauche : " + gauche);
+        builder1.setCancelable(true);
+
+
+        builder1.setPositiveButton(
+                "Okay",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                        finish();
+                    }
+                });
+
+        builder1.show();
+
 
     }
 }
