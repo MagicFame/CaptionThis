@@ -97,47 +97,49 @@ public class CameraActivity extends LiveCameraActivity{
                 if (var.getPartName().compareTo("rightWrist") == 0) poignetDroit = var;
 
                 if (var.getPartName().compareTo("nose") == 0) nez = var;
-                if (var.getPartName().compareTo("leftAnkle ") == 0) piedGauche = var;
+                if (var.getPartName().compareTo("leftAnkle") == 0) piedGauche = var;
                 if (var.getPartName().compareTo("rightAnkle") == 0) piedDroit = var;
+            }
 
-                // ET CALCULER LE RATIO
-                if (epauleDroite != null
-                        && epauleDroite.getScore() > 0.8
-                        && epauleGauche != null
-                        && epauleGauche.getScore() > 0.8
-                        && poignetDroit != null
-                        && poignetDroit.getScore() > 0.8
-                        && poignetGauche != null
-                        && poignetGauche.getScore() > 0.8
-                        && nez != null
-                        && nez.getScore() > 0.8
-                        && piedGauche != null
-                        && piedDroit != null
-                        && piedDroit.getScore() > 0.6
-                        && piedGauche.getScore() > 0.6) {
-                    System.out.println("OK");
-                    // Moyenne taille en pixel
-                    int taillePixel = (int)
-                            ((sqrt(nez.calculateSquaredDistanceFromCoordinates(piedDroit.getPosition()))
-                            + sqrt(nez.calculateSquaredDistanceFromCoordinates(piedGauche.getPosition()))) / 2);
-
-                    int droit = (int)(sqrt(epauleDroite.calculateSquaredDistanceFromCoordinates(poignetDroit.getPosition())));
-                    int gauche = (int)(sqrt(epauleGauche.calculateSquaredDistanceFromCoordinates(poignetGauche.getPosition())));
-                    alertData(droit, gauche);
-                }
+            if(nez != null && epauleDroite != null && epauleGauche != null && poignetDroit != null && poignetGauche != null && piedDroit != null && piedGauche != null) {
+                System.out.println("Score : (" + nez.getScore() + epauleDroite.getScore() +
+                        epauleGauche.getScore() + poignetDroit.getScore() + poignetGauche.getScore()
+                        + piedDroit.getScore() + piedGauche.getScore() + ")");
+            }
+            // ET CALCULER LE RATIO
+            if (epauleDroite != null
+                    && epauleDroite.getScore() > 0.9
+                    && epauleGauche != null
+                    && epauleGauche.getScore() > 0.9
+                    && poignetDroit != null
+                    && poignetDroit.getScore() > 0.9
+                    && poignetGauche != null
+                    && poignetGauche.getScore() > 0.9
+                    && nez != null
+                    && nez.getScore() > 0.9
+                    && piedGauche != null
+                    && piedDroit != null
+                    && piedDroit.getScore() > 0.5
+                    && piedGauche.getScore() > 0.5) {
+                // Moyenne taille en pixel
+                int taillePixel = (int)
+                        ((sqrt(nez.calculateSquaredDistanceFromCoordinates(piedDroit.getPosition()))
+                        + sqrt(nez.calculateSquaredDistanceFromCoordinates(piedGauche.getPosition()))) / 2);
+                int droit = (int)(sqrt(epauleDroite.calculateSquaredDistanceFromCoordinates(poignetDroit.getPosition())));
+                int gauche = (int)(sqrt(epauleGauche.calculateSquaredDistanceFromCoordinates(poignetGauche.getPosition())));
+                alertData(droit, gauche, taillePixel);
             }
         }
 
     }
 
-    protected void alertData(int droit, int gauche) {
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+    protected void alertData(final int droit, final int gauche, final int taillePixel) {
+        final AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
         builder1.setTitle("Votre taille réelle");
 
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_NUMBER);
         builder1.setView(input);
-        //builder1.setMessage("Distance bras droite : " + droit + " et distance bras gauche : " + gauche);
         builder1.setCancelable(true);
 
 
@@ -145,6 +147,11 @@ public class CameraActivity extends LiveCameraActivity{
                 "Okay",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        getUser().setCalibration(true);
+                        getUser().setTailleRelle(Integer.parseInt(input.getText().toString()));
+                        int tailleBrasRelle = ((droit + gauche) / 2 * Integer.parseInt(input.getText().toString()) / taillePixel) ;
+                        getUser().setTailleBras(tailleBrasRelle);
+                        System.out.println(getUser().getTailleBras() + "cm");
                         dialog.cancel();
                         finish();
                     }

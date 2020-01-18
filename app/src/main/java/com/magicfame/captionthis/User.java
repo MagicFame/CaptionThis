@@ -6,6 +6,8 @@ public class User implements Serializable {
     private String username;
     private int age;
     private boolean calibration;
+    private int tailleRelle;
+    private int tailleBras;
 
     public User() {
     }
@@ -38,5 +40,21 @@ public class User implements Serializable {
 
     public void setCalibration(boolean calibration) {
         this.calibration = calibration;
+    }
+
+    public int getTailleRelle() {
+        return tailleRelle;
+    }
+
+    public void setTailleRelle(int tailleRelle) {
+        this.tailleRelle = tailleRelle;
+    }
+
+    public int getTailleBras() {
+        return tailleBras;
+    }
+
+    public void setTailleBras(int tailleBras) {
+        this.tailleBras = tailleBras;
     }
 }

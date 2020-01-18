@@ -17,12 +17,15 @@ public abstract class LiveCameraActivity extends BaseCameraActivity implements I
     // 1 is for calibrage
     private int type;
 
+    private User user;
+
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupPredictor();
         Intent intent = getIntent();
         type = intent.getIntExtra("type", 0);
+        user = (User) getIntent().getSerializableExtra("User");
     }
 
     protected abstract void setupPredictor();
@@ -36,6 +39,8 @@ public abstract class LiveCameraActivity extends BaseCameraActivity implements I
     protected int getType() {
         return this.type;
     }
+
+    protected User getUser() { return this.user; }
 
     @Override
     protected int getLayoutId() {

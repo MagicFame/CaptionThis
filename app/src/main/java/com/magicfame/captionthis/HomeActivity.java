@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 // Menu activity
 public class HomeActivity extends AppCompatActivity {
 
-    User u = new User();
+    User u;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,20 +31,9 @@ public class HomeActivity extends AppCompatActivity {
         findViewById(R.id.button_exercice).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setContentView(R.layout.list_exercices);
-                findViewById(R.id.card_view).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (u.isCalibration() == false) {
-                            Snackbar.make(view, "Error, you should do calibration before", Snackbar.LENGTH_LONG)
-                                    .show();
-                        } else {
-                            Intent intent = new Intent(HomeActivity.this, CameraActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
-                    }
-                });
+                Intent intent = new Intent(HomeActivity.this, ListExercice.class);
+                intent.putExtra("User", u);
+                startActivity(intent);
             }
                 /*
                 Intent intent = new Intent(HomeActivity.this, CameraActivity.class);

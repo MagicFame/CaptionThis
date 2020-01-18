@@ -32,7 +32,6 @@ public class SignIn extends AppCompatActivity {
 
                     // To replace
                     intent.putExtra("User", new User(username, 22, false));
-
                     startActivity(intent);
                     finish();
                 }
