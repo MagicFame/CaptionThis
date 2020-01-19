@@ -57,4 +57,12 @@ public class User implements Serializable {
     public void setTailleBras(int tailleBras) {
         this.tailleBras = tailleBras;
     }
+
+    public void modifyObject (User u){
+        this.username = u.username;
+        this.age = u.age;
+        this.calibration = u.calibration;
+        this.tailleBras = u.tailleBras;
+        this.tailleRelle = u.tailleRelle;
+    }
 }

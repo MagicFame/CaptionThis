@@ -2,6 +2,7 @@ package com.magicfame.captionthis;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.media.Image;
 import android.text.InputType;
@@ -147,11 +148,11 @@ public class CameraActivity extends LiveCameraActivity{
                 "Okay",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        getUser().setCalibration(true);
-                        getUser().setTailleRelle(Integer.parseInt(input.getText().toString()));
-                        int tailleBrasRelle = ((droit + gauche) / 2 * Integer.parseInt(input.getText().toString()) / taillePixel) ;
-                        getUser().setTailleBras(tailleBrasRelle);
-                        System.out.println(getUser().getTailleBras() + "cm");
+                        int tailleBrasReel = ((droit + gauche) / 2 * Integer.parseInt(input.getText().toString()) / taillePixel);
+                        Intent returnIntent = new Intent();
+                        returnIntent.putExtra("tailleBrasReel", tailleBrasReel);
+                        returnIntent.putExtra("tailleCorpsReel", Integer.parseInt(input.getText().toString()));
+                        setResult(CameraActivity.RESULT_OK, returnIntent);
                         dialog.cancel();
                         finish();
                     }

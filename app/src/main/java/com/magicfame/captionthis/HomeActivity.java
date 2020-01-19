@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 // Menu activity
 public class HomeActivity extends AppCompatActivity {
-
+    static final int EDIT_PROFIL = 1;
     User u;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +26,6 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void addActionButton() {
-
         // Just an exercice option
         findViewById(R.id.button_exercice).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,9 +47,18 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(HomeActivity.this, Profile.class);
                 intent.putExtra("User", u);
-                startActivity(intent);
-
+                startActivityForResult(intent, EDIT_PROFIL);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == EDIT_PROFIL) {
+            if(resultCode == HomeActivity.RESULT_OK) {
+                User user = (User) data.getSerializableExtra("User");
+                u.modifyObject(user);
+            }
+        }
     }
 }
