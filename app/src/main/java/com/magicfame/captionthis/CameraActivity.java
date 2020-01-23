@@ -12,15 +12,19 @@ import android.widget.EditText;
 import org.json.JSONArray;
 
 import java.util.List;
-import ai.fritz.poseestimationmodelfast.PoseEstimationOnDeviceModelFast;
 import ai.fritz.vision.FritzVision;
 import ai.fritz.vision.FritzVisionImage;
+import ai.fritz.vision.FritzVisionModels;
 import ai.fritz.vision.FritzVisionOrientation;
 import ai.fritz.vision.ImageRotation;
+import ai.fritz.vision.ModelVariant;
+import ai.fritz.vision.filter.OneEuroFilterMethod;
 import ai.fritz.vision.poseestimation.FritzVisionPosePredictor;
+import ai.fritz.vision.poseestimation.FritzVisionPosePredictorOptions;
 import ai.fritz.vision.poseestimation.FritzVisionPoseResult;
 import ai.fritz.vision.poseestimation.Keypoint;
 import ai.fritz.vision.poseestimation.Pose;
+import ai.fritz.vision.poseestimation.PoseOnDeviceModel;
 
 import static java.lang.Math.sqrt;
 
@@ -35,9 +39,10 @@ public class CameraActivity extends LiveCameraActivity{
         // ----------------------------------------------
         // A FritzOnDeviceModel object is available when a model has been
         // successfully downloaded and included with the app.
-        PoseEstimationOnDeviceModelFast poseEstimationOnDeviceModel = new PoseEstimationOnDeviceModelFast();
-        predictor = FritzVision.PoseEstimation.getPredictor(poseEstimationOnDeviceModel);
-
+        PoseOnDeviceModel onDeviceModel= FritzVisionModels.getHumanPoseEstimationOnDeviceModel(ModelVariant.ACCURATE);
+        FritzVisionPosePredictorOptions posePredictorOptions = new FritzVisionPosePredictorOptions();
+        posePredictorOptions.smoothingOptions = new OneEuroFilterMethod();
+        predictor = FritzVision.PoseEstimation.getPredictor(onDeviceModel, posePredictorOptions);
         // ----------------------------------------------
         // END STEP 1
     }
@@ -92,14 +97,14 @@ public class CameraActivity extends LiveCameraActivity{
                     piedDroit = null;
             Keypoint[] key = pose.getKeypoints();
             for (Keypoint var : key) {
-                if (var.getPartName().compareTo("leftShoulder") == 0) epauleGauche = var;
-                if (var.getPartName().compareTo("rightShoulder") == 0) epauleDroite = var;
-                if (var.getPartName().compareTo("leftWrist") == 0) poignetGauche = var;
-                if (var.getPartName().compareTo("rightWrist") == 0) poignetDroit = var;
+                if (var.getName().compareTo("leftShoulder") == 0) epauleGauche = var;
+                if (var.getName().compareTo("rightShoulder") == 0) epauleDroite = var;
+                if (var.getName().compareTo("leftWrist") == 0) poignetGauche = var;
+                if (var.getName().compareTo("rightWrist") == 0) poignetDroit = var;
 
-                if (var.getPartName().compareTo("nose") == 0) nez = var;
-                if (var.getPartName().compareTo("leftAnkle") == 0) piedGauche = var;
-                if (var.getPartName().compareTo("rightAnkle") == 0) piedDroit = var;
+                if (var.getName().compareTo("nose") == 0) nez = var;
+                if (var.getName().compareTo("leftAnkle") == 0) piedGauche = var;
+                if (var.getName().compareTo("rightAnkle") == 0) piedDroit = var;
             }
 
             if(nez != null && epauleDroite != null && epauleGauche != null && poignetDroit != null && poignetGauche != null && piedDroit != null && piedGauche != null) {
