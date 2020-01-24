@@ -88,55 +88,59 @@ public class CameraActivity extends LiveCameraActivity{
 
     protected void traitementPoint(int type, Pose pose) {
         if(type == 1){
-            Keypoint epauleGauche = null,
-                    epauleDroite = null,
-                    poignetGauche = null,
-                    poignetDroit = null,
-                    nez = null,
-                    piedGauche = null,
-                    piedDroit = null;
-            Keypoint[] key = pose.getKeypoints();
-            for (Keypoint var : key) {
-                if (var.getName().compareTo("leftShoulder") == 0) epauleGauche = var;
-                if (var.getName().compareTo("rightShoulder") == 0) epauleDroite = var;
-                if (var.getName().compareTo("leftWrist") == 0) poignetGauche = var;
-                if (var.getName().compareTo("rightWrist") == 0) poignetDroit = var;
-
-                if (var.getName().compareTo("nose") == 0) nez = var;
-                if (var.getName().compareTo("leftAnkle") == 0) piedGauche = var;
-                if (var.getName().compareTo("rightAnkle") == 0) piedDroit = var;
-            }
-
-            if(nez != null && epauleDroite != null && epauleGauche != null && poignetDroit != null && poignetGauche != null && piedDroit != null && piedGauche != null) {
-                System.out.println("Score : (" + nez.getScore() + epauleDroite.getScore() +
-                        epauleGauche.getScore() + poignetDroit.getScore() + poignetGauche.getScore()
-                        + piedDroit.getScore() + piedGauche.getScore() + ")");
-            }
-            // ET CALCULER LE RATIO
-            if (epauleDroite != null
-                    && epauleDroite.getScore() > 0.9
-                    && epauleGauche != null
-                    && epauleGauche.getScore() > 0.9
-                    && poignetDroit != null
-                    && poignetDroit.getScore() > 0.9
-                    && poignetGauche != null
-                    && poignetGauche.getScore() > 0.9
-                    && nez != null
-                    && nez.getScore() > 0.9
-                    && piedGauche != null
-                    && piedDroit != null
-                    && piedDroit.getScore() > 0.5
-                    && piedGauche.getScore() > 0.5) {
-                // Moyenne taille en pixel
-                int taillePixel = (int)
-                        ((sqrt(nez.calculateSquaredDistanceFromCoordinates(piedDroit.getPosition()))
-                        + sqrt(nez.calculateSquaredDistanceFromCoordinates(piedGauche.getPosition()))) / 2);
-                int droit = (int)(sqrt(epauleDroite.calculateSquaredDistanceFromCoordinates(poignetDroit.getPosition())));
-                int gauche = (int)(sqrt(epauleGauche.calculateSquaredDistanceFromCoordinates(poignetGauche.getPosition())));
-                alertData(droit, gauche, taillePixel);
-            }
+           calibration(pose);
         }
 
+    }
+
+    protected void calibration (Pose pose) {
+        Keypoint epauleGauche = null,
+                epauleDroite = null,
+                poignetGauche = null,
+                poignetDroit = null,
+                nez = null,
+                piedGauche = null,
+                piedDroit = null;
+        Keypoint[] key = pose.getKeypoints();
+        for (Keypoint var : key) {
+            if (var.getName().compareTo("leftShoulder") == 0) epauleGauche = var;
+            if (var.getName().compareTo("rightShoulder") == 0) epauleDroite = var;
+            if (var.getName().compareTo("leftWrist") == 0) poignetGauche = var;
+            if (var.getName().compareTo("rightWrist") == 0) poignetDroit = var;
+
+            if (var.getName().compareTo("nose") == 0) nez = var;
+            if (var.getName().compareTo("leftAnkle") == 0) piedGauche = var;
+            if (var.getName().compareTo("rightAnkle") == 0) piedDroit = var;
+        }
+
+        if(nez != null && epauleDroite != null && epauleGauche != null && poignetDroit != null && poignetGauche != null && piedDroit != null && piedGauche != null) {
+            System.out.println("Score : (" + nez.getScore() + epauleDroite.getScore() +
+                    epauleGauche.getScore() + poignetDroit.getScore() + poignetGauche.getScore()
+                    + piedDroit.getScore() + piedGauche.getScore() + ")");
+        }
+        // ET CALCULER LE RATIO
+        if (epauleDroite != null
+                && epauleDroite.getScore() > 0.9
+                && epauleGauche != null
+                && epauleGauche.getScore() > 0.9
+                && poignetDroit != null
+                && poignetDroit.getScore() > 0.9
+                && poignetGauche != null
+                && poignetGauche.getScore() > 0.9
+                && nez != null
+                && nez.getScore() > 0.9
+                && piedGauche != null
+                && piedDroit != null
+                && piedDroit.getScore() > 0.5
+                && piedGauche.getScore() > 0.5) {
+            // Moyenne taille en pixel
+            int taillePixel = (int)
+                    ((sqrt(nez.calculateSquaredDistanceFromCoordinates(piedDroit.getPosition()))
+                            + sqrt(nez.calculateSquaredDistanceFromCoordinates(piedGauche.getPosition()))) / 2);
+            int droit = (int)(sqrt(epauleDroite.calculateSquaredDistanceFromCoordinates(poignetDroit.getPosition())));
+            int gauche = (int)(sqrt(epauleGauche.calculateSquaredDistanceFromCoordinates(poignetGauche.getPosition())));
+            alertData(droit, gauche, taillePixel);
+        }
     }
 
     protected void alertData(final int droit, final int gauche, final int taillePixel) {

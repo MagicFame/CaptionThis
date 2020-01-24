@@ -27,7 +27,7 @@ public class HomeActivity extends AppCompatActivity {
 
     public void addActionButton() {
         // Just an exercice option
-        findViewById(R.id.button_exercice).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.imageView10).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(HomeActivity.this, ListExercice.class);
@@ -42,7 +42,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         // Profile option
-        findViewById(R.id.button_profile).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.imageView7).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(HomeActivity.this, Profile.class);
