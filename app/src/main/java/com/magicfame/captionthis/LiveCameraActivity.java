@@ -22,6 +22,7 @@ public abstract class LiveCameraActivity extends BaseCameraActivity implements I
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupPredictor();
+        getSupportActionBar().hide();
         Intent intent = getIntent();
         type = intent.getIntExtra("type", 0);
     }

@@ -31,7 +31,7 @@ public class SignIn extends AppCompatActivity {
                     Intent intent = new Intent(SignIn.this, HomeActivity.class);
 
                     // To replace
-                    intent.putExtra("User", new User(username, 22, false));
+                    intent.putExtra("User", new User(username, 22, true));
                     startActivity(intent);
                     finish();
                 }

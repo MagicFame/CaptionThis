@@ -29,6 +29,7 @@ public class ListExercice extends AppCompatActivity {
                             .show();
                 } else {
                     Intent intent = new Intent(ListExercice.this, CameraActivity.class);
+                    intent.putExtra("type", 2);
                     startActivity(intent);
                 }
             }

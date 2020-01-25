@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 // Menu activity
@@ -34,11 +32,6 @@ public class HomeActivity extends AppCompatActivity {
                 intent.putExtra("User", u);
                 startActivity(intent);
             }
-                /*
-                Intent intent = new Intent(HomeActivity.this, CameraActivity.class);
-                startActivity(intent);
-                finish();
-                */
         });
 
         // Profile option

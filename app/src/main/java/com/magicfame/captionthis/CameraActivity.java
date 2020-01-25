@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.media.Image;
+import android.speech.tts.TextToSpeech;
 import android.text.InputType;
 import android.util.Size;
 import android.widget.EditText;
@@ -12,6 +13,8 @@ import android.widget.EditText;
 import org.json.JSONArray;
 
 import java.util.List;
+import java.util.Locale;
+
 import ai.fritz.vision.FritzVision;
 import ai.fritz.vision.FritzVisionImage;
 import ai.fritz.vision.FritzVisionModels;
@@ -33,6 +36,7 @@ public class CameraActivity extends LiveCameraActivity{
     FritzVisionPosePredictor predictor;
     FritzVisionImage visionImage;
     FritzVisionPoseResult poseResult;
+    TextToSpeech textToSpeech;
     @Override
     protected void setupPredictor() {
         // STEP 1: Get the predictor and set the options.
@@ -45,6 +49,22 @@ public class CameraActivity extends LiveCameraActivity{
         predictor = FritzVision.PoseEstimation.getPredictor(onDeviceModel, posePredictorOptions);
         // ----------------------------------------------
         // END STEP 1
+        textToSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status != TextToSpeech.ERROR) {
+                    textToSpeech.setLanguage(Locale.FRANCE);
+                    String toSpeak = "Veuillez vous placer devant la caméra";
+                    textToSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null, null);
+                }
+            }
+        });
+    }
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        textToSpeech.shutdown();
     }
 
     @Override
@@ -82,13 +102,13 @@ public class CameraActivity extends LiveCameraActivity{
             }
 
         }
-        // ----------------------------------
-        // END STEP 4
     }
 
     protected void traitementPoint(int type, Pose pose) {
         if(type == 1){
            calibration(pose);
+        } else if(type == 2){
+            pushUp(pose);
         }
 
     }
@@ -139,11 +159,11 @@ public class CameraActivity extends LiveCameraActivity{
                             + sqrt(nez.calculateSquaredDistanceFromCoordinates(piedGauche.getPosition()))) / 2);
             int droit = (int)(sqrt(epauleDroite.calculateSquaredDistanceFromCoordinates(poignetDroit.getPosition())));
             int gauche = (int)(sqrt(epauleGauche.calculateSquaredDistanceFromCoordinates(poignetGauche.getPosition())));
-            alertData(droit, gauche, taillePixel);
+            alertCalibration(droit, gauche, taillePixel);
         }
     }
 
-    protected void alertData(final int droit, final int gauche, final int taillePixel) {
+    protected void alertCalibration(final int droit, final int gauche, final int taillePixel) {
         final AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
         builder1.setTitle("Votre taille réelle");
 
@@ -168,6 +188,9 @@ public class CameraActivity extends LiveCameraActivity{
                 });
 
         builder1.show();
+    }
+
+    protected void pushUp(Pose pose){
 
 
     }

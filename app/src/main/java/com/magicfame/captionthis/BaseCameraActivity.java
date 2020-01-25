@@ -166,7 +166,6 @@ public abstract class BaseCameraActivity extends AppCompatActivity implements Im
             for (final String cameraId : manager.getCameraIdList()) {
                 final CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
 
-                // We don't use a front facing camera in this sample.
                 final Integer facing = characteristics.get(CameraCharacteristics.LENS_FACING);
                 if (facing != null && facing == CameraCharacteristics.LENS_FACING_BACK) {
                     continue;
