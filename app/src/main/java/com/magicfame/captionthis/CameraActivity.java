@@ -10,8 +10,6 @@ import android.text.InputType;
 import android.util.Size;
 import android.widget.EditText;
 
-import org.json.JSONArray;
-
 import java.util.List;
 import java.util.Locale;
 
@@ -37,6 +35,7 @@ public class CameraActivity extends LiveCameraActivity{
     FritzVisionImage visionImage;
     FritzVisionPoseResult poseResult;
     TextToSpeech textToSpeech;
+    int stepOfExercice = 0;
     @Override
     protected void setupPredictor() {
         // STEP 1: Get the predictor and set the options.
@@ -93,14 +92,11 @@ public class CameraActivity extends LiveCameraActivity{
         // ----------------------------------
         if (poseResult != null) {
             List<Pose> poses = poseResult.getPoses();
-
             for (Pose pose : poses) {
                 pose.draw(canvas);
-
                 // Traitement sur les points
                 traitementPoint(getType(), pose);
             }
-
         }
     }
 
@@ -114,8 +110,8 @@ public class CameraActivity extends LiveCameraActivity{
     }
 
     protected void calibration (Pose pose) {
-        Keypoint epauleGauche = null,
-                epauleDroite = null,
+        Keypoint leftShoulder = null,
+                rightShoulder = null,
                 poignetGauche = null,
                 poignetDroit = null,
                 nez = null,
@@ -123,8 +119,8 @@ public class CameraActivity extends LiveCameraActivity{
                 piedDroit = null;
         Keypoint[] key = pose.getKeypoints();
         for (Keypoint var : key) {
-            if (var.getName().compareTo("leftShoulder") == 0) epauleGauche = var;
-            if (var.getName().compareTo("rightShoulder") == 0) epauleDroite = var;
+            if (var.getName().compareTo("leftShoulder") == 0) leftShoulder = var;
+            if (var.getName().compareTo("rightShoulder") == 0) rightShoulder = var;
             if (var.getName().compareTo("leftWrist") == 0) poignetGauche = var;
             if (var.getName().compareTo("rightWrist") == 0) poignetDroit = var;
 
@@ -133,32 +129,25 @@ public class CameraActivity extends LiveCameraActivity{
             if (var.getName().compareTo("rightAnkle") == 0) piedDroit = var;
         }
 
-        if(nez != null && epauleDroite != null && epauleGauche != null && poignetDroit != null && poignetGauche != null && piedDroit != null && piedGauche != null) {
-            System.out.println("Score : (" + nez.getScore() + epauleDroite.getScore() +
-                    epauleGauche.getScore() + poignetDroit.getScore() + poignetGauche.getScore()
+        if(nez != null && rightShoulder != null && leftShoulder != null && poignetDroit != null && poignetGauche != null && piedDroit != null && piedGauche != null) {
+            System.out.println("Score : (" + nez.getScore() + rightShoulder.getScore() +
+                    leftShoulder.getScore() + poignetDroit.getScore() + poignetGauche.getScore()
                     + piedDroit.getScore() + piedGauche.getScore() + ")");
         }
         // ET CALCULER LE RATIO
-        if (epauleDroite != null
-                && epauleDroite.getScore() > 0.9
-                && epauleGauche != null
-                && epauleGauche.getScore() > 0.9
-                && poignetDroit != null
-                && poignetDroit.getScore() > 0.9
-                && poignetGauche != null
-                && poignetGauche.getScore() > 0.9
-                && nez != null
-                && nez.getScore() > 0.9
-                && piedGauche != null
-                && piedDroit != null
-                && piedDroit.getScore() > 0.5
-                && piedGauche.getScore() > 0.5) {
+        if (isDefineAndGoodScore(rightShoulder,0.9)
+                && isDefineAndGoodScore(leftShoulder ,0.9)
+                && isDefineAndGoodScore(poignetDroit, 0.9)
+                && isDefineAndGoodScore(poignetGauche, 0.9)
+                && isDefineAndGoodScore(nez, 0.9)
+                && isDefineAndGoodScore(piedGauche,0.5)
+                && isDefineAndGoodScore(piedDroit, 0.5)) {
             // Moyenne taille en pixel
             int taillePixel = (int)
                     ((sqrt(nez.calculateSquaredDistanceFromCoordinates(piedDroit.getPosition()))
                             + sqrt(nez.calculateSquaredDistanceFromCoordinates(piedGauche.getPosition()))) / 2);
-            int droit = (int)(sqrt(epauleDroite.calculateSquaredDistanceFromCoordinates(poignetDroit.getPosition())));
-            int gauche = (int)(sqrt(epauleGauche.calculateSquaredDistanceFromCoordinates(poignetGauche.getPosition())));
+            int droit = (int)(sqrt(rightShoulder.calculateSquaredDistanceFromCoordinates(poignetDroit.getPosition())));
+            int gauche = (int)(sqrt(leftShoulder.calculateSquaredDistanceFromCoordinates(poignetGauche.getPosition())));
             alertCalibration(droit, gauche, taillePixel);
         }
     }
@@ -166,13 +155,10 @@ public class CameraActivity extends LiveCameraActivity{
     protected void alertCalibration(final int droit, final int gauche, final int taillePixel) {
         final AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
         builder1.setTitle("Votre taille réelle");
-
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_NUMBER);
         builder1.setView(input);
         builder1.setCancelable(true);
-
-
         builder1.setPositiveButton(
                 "Okay",
                 new DialogInterface.OnClickListener() {
@@ -186,12 +172,71 @@ public class CameraActivity extends LiveCameraActivity{
                         finish();
                     }
                 });
-
         builder1.show();
     }
 
     protected void pushUp(Pose pose){
+        if(stepOfExercice == 0){
+            String toSpeak = "Bievenue sur l'exercice de pompes";
+            textToSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null, null);
+            stepOfExercice = 1;
+        }
 
+        Keypoint leftShoulder = null,
+                rightShoulder = null,
+                coudeDroit = null,
+                coudeGauche = null,
+                poignetGauche = null,
+                poignetDroit = null,
+                hancheGauche = null,
+                hancheDroite = null,
+                genouGauche = null,
+                genouDroit = null,
+                piedGauche = null,
+                piedDroit = null;
+        Keypoint[] key = pose.getKeypoints();
+        for (Keypoint var : key) {
+            if (var.getName().compareTo("leftShoulder") == 0) leftShoulder = var;
+            if (var.getName().compareTo("rightShoulder") == 0) rightShoulder = var;
 
+            if (var.getName().compareTo("rightElbow") == 0) coudeDroit = var;
+            if (var.getName().compareTo("leftElbow") == 0) coudeGauche = var;
+
+            if (var.getName().compareTo("leftWrist") == 0) poignetGauche = var;
+            if (var.getName().compareTo("rightWrist") == 0) poignetDroit = var;
+
+            if (var.getName().compareTo("leftHip") == 0) hancheGauche = var;
+            if (var.getName().compareTo("rightHip") == 0) hancheDroite = var;
+
+            if (var.getName().compareTo("leftKnee") == 0) genouGauche = var;
+            if (var.getName().compareTo("rightKnee") == 0) genouDroit = var;
+
+            if (var.getName().compareTo("leftAnkle") == 0) piedGauche = var;
+            if (var.getName().compareTo("rightAnkle") == 0) piedDroit = var;
+        }
+
+        // Membre de départs
+        if(stepOfExercice == 1){
+            if(isDefineAndGoodScore(leftShoulder, 0.8) &&
+                    isDefineAndGoodScore(coudeGauche, 0.8) &&
+                    isDefineAndGoodScore(poignetGauche, 0.8)&&
+                    isDefineAndGoodScore(rightShoulder, 0.8) &&
+                    isDefineAndGoodScore(coudeDroit, 0.8) &&
+                    isDefineAndGoodScore(poignetDroit, 0.8)
+                   ){
+                String toSpeak = "Prenez la position de départ";
+                textToSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null, null);
+                stepOfExercice = 2;
+            }
+        }
+
+    }
+
+    public boolean isDefineAndGoodScore(Keypoint key, double score){
+        if(key != null && key.getScore() > score){
+            return true;
+        } else {
+            return false;
+        }
     }
 }
