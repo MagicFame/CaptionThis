@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
+import android.graphics.PointF;
 import android.media.Image;
 import android.speech.tts.TextToSpeech;
 import android.text.InputType;
@@ -93,7 +94,7 @@ public class CameraActivity extends LiveCameraActivity{
         if (poseResult != null) {
             List<Pose> poses = poseResult.getPoses();
             for (Pose pose : poses) {
-                pose.draw(canvas);
+                if (stepOfExercice == 0) pose.draw(canvas);
                 // Traitement sur les points
                 traitementPoint(getType(), pose);
             }
@@ -105,6 +106,12 @@ public class CameraActivity extends LiveCameraActivity{
            calibration(pose);
         } else if(type == 2){
             pushUp(pose);
+        } else if(type == 3){
+            shoulderPress(pose);
+        } else if(type == 4){
+
+        } else {
+
         }
 
     }
@@ -176,12 +183,6 @@ public class CameraActivity extends LiveCameraActivity{
     }
 
     protected void pushUp(Pose pose){
-        if(stepOfExercice == 0){
-            String toSpeak = "Bievenue sur l'exercice de pompes";
-            textToSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null, null);
-            stepOfExercice = 1;
-        }
-
         Keypoint leftShoulder = null,
                 rightShoulder = null,
                 coudeDroit = null,
@@ -214,15 +215,21 @@ public class CameraActivity extends LiveCameraActivity{
             if (var.getName().compareTo("leftAnkle") == 0) piedGauche = var;
             if (var.getName().compareTo("rightAnkle") == 0) piedDroit = var;
         }
+        if(stepOfExercice == 0){
+            String toSpeak = "Bievenue sur l'exercice de pompes";
+            textToSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null, null);
+            stepOfExercice = 1;
+        }
+
 
         // Membre de départs
         if(stepOfExercice == 1){
-            if(isDefineAndGoodScore(leftShoulder, 0.8) &&
-                    isDefineAndGoodScore(coudeGauche, 0.8) &&
-                    isDefineAndGoodScore(poignetGauche, 0.8)&&
-                    isDefineAndGoodScore(rightShoulder, 0.8) &&
-                    isDefineAndGoodScore(coudeDroit, 0.8) &&
-                    isDefineAndGoodScore(poignetDroit, 0.8)
+            System.out.println("("+leftShoulder.getScore() + "," + coudeGauche.getScore() +","+
+                    rightShoulder.getScore() + "," + coudeDroit.getScore()+ ")");
+            if(isDefineAndGoodScore(leftShoulder, 0.5) &&
+                    isDefineAndGoodScore(coudeGauche, 0.5) &&
+                    isDefineAndGoodScore(rightShoulder, 0.5) &&
+                    isDefineAndGoodScore(coudeDroit, 0.5)
                    ){
                 String toSpeak = "Prenez la position de départ";
                 textToSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null, null);
@@ -230,6 +237,86 @@ public class CameraActivity extends LiveCameraActivity{
             }
         }
 
+    }
+
+    public void shoulderPress(Pose pose) {
+        Keypoint leftShoulder = null,
+                rightShoulder = null,
+                coudeDroit = null,
+                coudeGauche = null,
+                poignetGauche = null,
+                poignetDroit = null,
+                hancheGauche = null,
+                hancheDroite = null,
+                genouGauche = null,
+                genouDroit = null,
+                piedGauche = null,
+                piedDroit = null;
+        Keypoint[] key = pose.getKeypoints();
+        for (Keypoint var : key) {
+            if (var.getName().compareTo("leftShoulder") == 0) leftShoulder = var;
+            if (var.getName().compareTo("rightShoulder") == 0) rightShoulder = var;
+
+            if (var.getName().compareTo("rightElbow") == 0) coudeDroit = var;
+            if (var.getName().compareTo("leftElbow") == 0) coudeGauche = var;
+
+            if (var.getName().compareTo("leftWrist") == 0) poignetGauche = var;
+            if (var.getName().compareTo("rightWrist") == 0) poignetDroit = var;
+
+            if(stepOfExercice == 0){
+            String toSpeak = "Bievenue sur l'exercice de développé épaules";
+            textToSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null, null);
+            stepOfExercice = 1;
+        }
+
+        }
+        if(stepOfExercice == 1){
+            if(isDefineAndGoodScore(leftShoulder, 0.5) &&
+                    isDefineAndGoodScore(coudeGauche, 0.5) &&
+                    isDefineAndGoodScore(rightShoulder, 0.5) &&
+                    isDefineAndGoodScore(coudeDroit, 0.5) &&
+                    isDefineAndGoodScore(poignetDroit,0.5)&&
+                    isDefineAndGoodScore(poignetGauche, 0.5)
+            ){
+                String toSpeak = "Prenez la position de départ";
+                textToSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null, null);
+                stepOfExercice = 2;
+            }
+        }
+
+        else if(stepOfExercice == 2) {
+            if(compareTwoPoints(rightShoulder.getPosition(), coudeDroit.getPosition(), 1) &&
+                    compareTwoPoints(leftShoulder.getPosition(), coudeGauche.getPosition(), 1) &&
+                    compareTwoPoints(poignetGauche.getPosition() , coudeGauche.getPosition(), 2) &&
+                    compareTwoPoints(poignetDroit.getPosition() , coudeDroit.getPosition(), 2)){
+                String toSpeak = "Début de l'exercice";
+                textToSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null, null);
+                stepOfExercice = 3;
+            }
+        }
+        else if(stepOfExercice == 3) {
+
+        }
+    }
+
+    // Method to compare two points attribute
+    public boolean compareTwoPoints(PointF membre1, PointF membre2, int comparaison){
+        // Compare y attribute (hauteur)
+        if(comparaison == 1) {
+            if(Math.abs(membre1.y - membre2.y) < 30)
+                return true;
+            return false;
+        }
+        // Compare x attribute
+        else if (comparaison == 2) {
+            if(Math.abs(membre1.x - membre2.x) < 30)
+                return true;
+            return false;
+        }
+        // If the comparaison value is different
+        else {
+            return false;
+        }
     }
 
     public boolean isDefineAndGoodScore(Keypoint key, double score){

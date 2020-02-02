@@ -34,5 +34,33 @@ public class ListExercice extends AppCompatActivity {
                 }
             }
         });
+
+        findViewById(R.id.card_view1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (user.isCalibration() == false) {
+                    Snackbar.make(view, "Error, you should do calibration before", Snackbar.LENGTH_LONG)
+                            .show();
+                } else {
+                    Intent intent = new Intent(ListExercice.this, CameraActivity.class);
+                    intent.putExtra("type", 3);
+                    startActivity(intent);
+                }
+            }
+        });
+
+        findViewById(R.id.card_view2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (user.isCalibration() == false) {
+                    Snackbar.make(view, "Error, you should do calibration before", Snackbar.LENGTH_LONG)
+                            .show();
+                } else {
+                    Intent intent = new Intent(ListExercice.this, CameraActivity.class);
+                    intent.putExtra("type", 4);
+                    startActivity(intent);
+                }
+            }
+        });
     }
 }
