@@ -9,8 +9,11 @@ import android.media.Image;
 import android.speech.tts.TextToSpeech;
 import android.text.InputType;
 import android.util.Size;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -37,6 +40,8 @@ public class CameraActivity extends LiveCameraActivity{
     FritzVisionPoseResult poseResult;
     TextToSpeech textToSpeech;
     int stepOfExercice = 0;
+    boolean endExercice = false;
+    private List<PointF[]> positions = new ArrayList<PointF[]>();
     @Override
     protected void setupPredictor() {
         // STEP 1: Get the predictor and set the options.
@@ -295,8 +300,44 @@ public class CameraActivity extends LiveCameraActivity{
             }
         }
         else if(stepOfExercice == 3) {
-
+            PointF[] points = {rightShoulder.getPosition(), leftShoulder.getPosition(),
+                    coudeDroit.getPosition(), coudeGauche.getPosition(), poignetDroit.getPosition(),
+                    poignetGauche.getPosition()};
+            positions.add(points);
+            if(!endExercice){
+               Button endBut = findViewById(R.id.end_button);
+               endBut.setVisibility(View.VISIBLE);
+               endBut.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View view) {
+                       stepOfExercice = 4;
+                   }
+               });
+               endExercice = true;
+            }
+        } else if(stepOfExercice == 4){
+            analysePoint();
         }
+    }
+
+    // Method post exercice to do operations
+    public void analysePoint(){
+        int nombreDeRepetition = 0;
+        float score = 0;
+        // Pour chaque position on récupère l'actuelle et la suivante
+        for(int inc = 0; inc < getPositions().size() -1; inc++){
+             PointF[] pointActuel = getPositions().get(inc);
+             PointF[] pointSuivant = getPositions().get(inc+1);
+             //Pour chaque KeyPoint des positions
+            for(int incTab = 0; incTab < 6; incTab++){
+
+            }
+        }
+
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("nombreRepetition", nombreDeRepetition);
+        returnIntent.putExtra("score", score);
+        finish();
     }
 
     // Method to compare two points attribute
@@ -325,5 +366,9 @@ public class CameraActivity extends LiveCameraActivity{
         } else {
             return false;
         }
+    }
+
+    public List<PointF[]> getPositions(){
+        return this.positions;
     }
 }
