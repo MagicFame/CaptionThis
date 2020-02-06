@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
+import android.graphics.Point;
 import android.graphics.PointF;
 import android.media.Image;
 import android.speech.tts.TextToSpeech;
@@ -250,13 +251,7 @@ public class CameraActivity extends LiveCameraActivity{
                 coudeDroit = null,
                 coudeGauche = null,
                 poignetGauche = null,
-                poignetDroit = null,
-                hancheGauche = null,
-                hancheDroite = null,
-                genouGauche = null,
-                genouDroit = null,
-                piedGauche = null,
-                piedDroit = null;
+                poignetDroit = null;
         Keypoint[] key = pose.getKeypoints();
         for (Keypoint var : key) {
             if (var.getName().compareTo("leftShoulder") == 0) leftShoulder = var;
@@ -272,8 +267,7 @@ public class CameraActivity extends LiveCameraActivity{
             String toSpeak = "Bievenue sur l'exercice de développé épaules";
             textToSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null, null);
             stepOfExercice = 1;
-        }
-
+            }
         }
         if(stepOfExercice == 1){
             if(isDefineAndGoodScore(leftShoulder, 0.5) &&
@@ -325,10 +319,12 @@ public class CameraActivity extends LiveCameraActivity{
         int nombreDeRepetition = 0;
         float score = 0;
         // Pour chaque position on récupère l'actuelle et la suivante
-        for(int inc = 0; inc < getPositions().size() -1; inc++){
-             PointF[] pointActuel = getPositions().get(inc);
-             PointF[] pointSuivant = getPositions().get(inc+1);
-             //Pour chaque KeyPoint des positions
+        // On commence l'itération à et on finit à -
+        for(int inc = 1; inc < getPositions().size() -1; inc++){
+            PointF[] pointPrecedent = getPositions().get(inc - 1);
+            PointF[] pointActuel = getPositions().get(inc);
+            PointF[] pointSuivant = getPositions().get(inc+1);
+            //Pour chaque KeyPoint des positions
             for(int incTab = 0; incTab < 6; incTab++){
 
             }
