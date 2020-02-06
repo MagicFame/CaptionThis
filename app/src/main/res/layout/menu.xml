@@ -15,15 +15,21 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#006B1414"
+            android:backgroundTint="#00852828"
             android:orientation="horizontal">
 
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="217dp"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/captionthis" />
+                android:adjustViewBounds="true"
+                android:background="#00B12626"
+                android:backgroundTint="#00290000"
+                android:backgroundTintMode="src_atop"
+                app:srcCompat="@drawable/logo_transparent" />
 
         </LinearLayout>
 
