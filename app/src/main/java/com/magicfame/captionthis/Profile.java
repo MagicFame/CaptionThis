@@ -71,7 +71,6 @@ public class Profile extends AppCompatActivity {
                 u.setTailleBras(tailleBras);
                 updateDataOnLayout();
             } if (resultCode == Activity.RESULT_CANCELED){
-
             }
         }
     }

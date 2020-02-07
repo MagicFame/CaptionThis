@@ -25,6 +25,7 @@
         <activity android:name=".HomeActivity"></activity>
         <activity android:name=".Profile"></activity>
         <activity android:name=".ListExercice"></activity>
+        <activity android:name=".Recapitulatif"></activity>
         <service
             android:name="ai.fritz.core.FritzCustomModelService"
             android:exported="true"

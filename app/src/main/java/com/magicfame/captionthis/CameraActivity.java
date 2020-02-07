@@ -32,6 +32,7 @@ import ai.fritz.vision.poseestimation.Keypoint;
 import ai.fritz.vision.poseestimation.Pose;
 import ai.fritz.vision.poseestimation.PoseOnDeviceModel;
 
+import static java.lang.Math.abs;
 import static java.lang.Math.sqrt;
 
 
@@ -318,21 +319,65 @@ public class CameraActivity extends LiveCameraActivity{
     public void analysePoint(){
         int nombreDeRepetition = 0;
         float score = 0;
+        float noteDepart = 5, noteFin = 5, duree = 0;
         // Pour chaque position on récupère l'actuelle et la suivante
-        // On commence l'itération à et on finit à -
+        // On commence l'itération à 1 et on fini à -1
         for(int inc = 1; inc < getPositions().size() -1; inc++){
             PointF[] pointPrecedent = getPositions().get(inc - 1);
             PointF[] pointActuel = getPositions().get(inc);
             PointF[] pointSuivant = getPositions().get(inc+1);
             //Pour chaque KeyPoint des positions
-            for(int incTab = 0; incTab < 6; incTab++){
 
+            // Vérifier les posititons de départs
+            // Vérifier les positions d'arrivée et vérifier taille des bras
+            // Vérifier la vitesse d'exécution
+
+            // Position d'arrivée
+            // Si les mains et coude précédent sont plus bas
+            if(pointPrecedent[3].y < pointActuel[3].y
+                    && pointPrecedent[4].y < pointActuel[4].y
+                    && pointPrecedent[5].y < pointActuel[5].y
+                    && pointPrecedent[6].y < pointActuel[6].y){
+                // Si main et coude suivant sont plus bas
+                if(pointSuivant[3].y < pointActuel[3].y
+                        && pointSuivant[4].y < pointActuel[4].y
+                        && pointSuivant[5].y < pointActuel[5].y
+                        && pointSuivant[6].y < pointActuel[6].y){
+                    // On a un point le plus haut
+                    nombreDeRepetition++;
+                    System.out.println("Point max");
+                    // Calcul score position
+                    // TO DO : trouver comment noter le mouvent du haut
+                    noteDepart = noteDepart +
+                            abs(pointActuel[0].x - pointActuel[2].x - pointActuel[4].x) +
+                            abs(pointActuel[1].x - pointActuel[3].x - pointActuel[5].x);
+                }
             }
-        }
+            // sinon si mains et coude précédent sont plus haut
+            else if(pointPrecedent[3].y > pointActuel[3].y
+                    && pointPrecedent[4].y > pointActuel[4].y
+                    && pointPrecedent[5].y > pointActuel[5].y
+                    && pointPrecedent[6].y > pointActuel[6].y){
+                if(pointSuivant[3].y > pointActuel[3].y
+                        && pointSuivant[4].y > pointActuel[4].y
+                        && pointSuivant[5].y > pointActuel[5].y
+                        && pointSuivant[6].y > pointActuel[6].y){
+                    // On a un point le plus bas
+                    System.out.println("Point minimal");
+                    // TO DO : Trouver une formule
+                    noteFin = noteFin +  abs(pointActuel[0].y - pointActuel[2].y) +
+                            abs(pointActuel[1].y - pointActuel[3].y) +
+                            abs(pointActuel[2].x - pointActuel[4].x) +
+                            abs(pointActuel[3].x - pointActuel[5].x);
+                }
+            }
 
-        Intent returnIntent = new Intent();
-        returnIntent.putExtra("nombreRepetition", nombreDeRepetition);
-        returnIntent.putExtra("score", score);
+        }
+        score = (noteDepart + noteFin) / 2;
+        Intent intent = new Intent(CameraActivity.this, Recapitulatif.class);
+        intent.putExtra("nombreRepetition", nombreDeRepetition);
+        intent.putExtra("score", score);
+        startActivity(intent);
         finish();
     }
 
@@ -355,6 +400,7 @@ public class CameraActivity extends LiveCameraActivity{
             return false;
         }
     }
+
 
     public boolean isDefineAndGoodScore(Keypoint key, double score){
         if(key != null && key.getScore() > score){
