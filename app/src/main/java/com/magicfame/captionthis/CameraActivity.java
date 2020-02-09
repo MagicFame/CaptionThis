@@ -312,6 +312,7 @@ public class CameraActivity extends LiveCameraActivity{
             }
         } else if(stepOfExercice == 4){
             analysePoint();
+            stepOfExercice = 5;
         }
     }
 
@@ -334,15 +335,15 @@ public class CameraActivity extends LiveCameraActivity{
 
             // Position d'arrivée
             // Si les mains et coude précédent sont plus bas
-            if(pointPrecedent[3].y < pointActuel[3].y
+            if(pointPrecedent[2].y < pointActuel[2].y
+                    && pointPrecedent[3].y < pointActuel[3].y
                     && pointPrecedent[4].y < pointActuel[4].y
-                    && pointPrecedent[5].y < pointActuel[5].y
-                    && pointPrecedent[6].y < pointActuel[6].y){
+                    && pointPrecedent[5].y < pointActuel[5].y){
                 // Si main et coude suivant sont plus bas
-                if(pointSuivant[3].y < pointActuel[3].y
+                if(pointSuivant[2].y < pointActuel[2].y
+                        && pointSuivant[3].y < pointActuel[3].y
                         && pointSuivant[4].y < pointActuel[4].y
-                        && pointSuivant[5].y < pointActuel[5].y
-                        && pointSuivant[6].y < pointActuel[6].y){
+                        && pointSuivant[5].y < pointActuel[5].y){
                     // On a un point le plus haut
                     nombreDeRepetition++;
                     System.out.println("Point max");
@@ -354,14 +355,14 @@ public class CameraActivity extends LiveCameraActivity{
                 }
             }
             // sinon si mains et coude précédent sont plus haut
-            else if(pointPrecedent[3].y > pointActuel[3].y
+            else if(pointPrecedent[2].y > pointActuel[2].y
+                    && pointPrecedent[3].y > pointActuel[3].y
                     && pointPrecedent[4].y > pointActuel[4].y
-                    && pointPrecedent[5].y > pointActuel[5].y
-                    && pointPrecedent[6].y > pointActuel[6].y){
-                if(pointSuivant[3].y > pointActuel[3].y
+                    && pointPrecedent[5].y > pointActuel[5].y){
+                if(pointSuivant[2].y > pointActuel[2].y
+                        && pointSuivant[3].y > pointActuel[3].y
                         && pointSuivant[4].y > pointActuel[4].y
-                        && pointSuivant[5].y > pointActuel[5].y
-                        && pointSuivant[6].y > pointActuel[6].y){
+                        && pointSuivant[5].y > pointActuel[5].y){
                     // On a un point le plus bas
                     System.out.println("Point minimal");
                     // TO DO : Trouver une formule

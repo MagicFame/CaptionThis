@@ -14,7 +14,7 @@ public class ListExercice extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().hide();
+        //getSupportActionBar().hide();
         setContentView(R.layout.list_exercices);
         user = (User) getIntent().getSerializableExtra("User");
         define();

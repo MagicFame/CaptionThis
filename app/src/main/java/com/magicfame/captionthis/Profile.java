@@ -16,7 +16,7 @@ public class Profile extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().hide();
+        //getSupportActionBar().hide();
         setContentView(R.layout.profile);
         u = (User) getIntent().getSerializableExtra("User");
         updateDataOnLayout();

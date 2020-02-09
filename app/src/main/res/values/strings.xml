@@ -3,4 +3,5 @@
     <string name="camera_error">This device doesn\'t support Camera2 API.</string>
     <string name="sign_in">Sign in</string>
     <string name="connect">Register</string>
+    <string name="logo">logo</string>
 </resources>

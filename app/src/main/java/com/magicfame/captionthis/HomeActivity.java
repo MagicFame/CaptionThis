@@ -14,7 +14,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().hide();
+        //getSupportActionBar().hide();
         u = (User) getIntent().getSerializableExtra("User");
         setContentView(R.layout.menu);
         String text = ((TextView) findViewById(R.id.textView3)).getText().toString();

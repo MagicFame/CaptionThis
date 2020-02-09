@@ -22,14 +22,14 @@
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="match_parent"
-                android:layout_height="217dp"
+                android:layout_width="413dp"
+                android:layout_height="214dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
-                android:background="#00B12626"
-                android:backgroundTint="#00290000"
+                android:background="@color/blueCaptionThis"
+                android:backgroundTint="@color/blueCaptionThis"
                 android:backgroundTintMode="src_atop"
-                app:srcCompat="@drawable/logo_transparent" />
+                app:srcCompat="@drawable/logo" />
 
         </LinearLayout>
 
