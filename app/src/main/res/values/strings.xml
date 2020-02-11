@@ -4,4 +4,8 @@
     <string name="sign_in">Sign in</string>
     <string name="connect">Register</string>
     <string name="logo">logo</string>
+    <string name="felicitation">Félicitation</string>
+    <string name="ta_note">Ta note</string>
+    <string name="nombre_de_repetitions">Nombre de répétitions</string>
+    <string name="_2">2</string>
 </resources>

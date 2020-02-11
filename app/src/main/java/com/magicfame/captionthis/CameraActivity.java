@@ -7,11 +7,13 @@ import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.media.Image;
+import android.os.SystemClock;
 import android.speech.tts.TextToSpeech;
 import android.text.InputType;
 import android.util.Size;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.EditText;
 
 import java.util.ArrayList;
@@ -44,6 +46,7 @@ public class CameraActivity extends LiveCameraActivity{
     int stepOfExercice = 0;
     boolean endExercice = false;
     private List<PointF[]> positions = new ArrayList<PointF[]>();
+    private long tstart;
     @Override
     protected void setupPredictor() {
         // STEP 1: Get the predictor and set the options.
@@ -292,6 +295,7 @@ public class CameraActivity extends LiveCameraActivity{
                 String toSpeak = "Début de l'exercice";
                 textToSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null, null);
                 stepOfExercice = 3;
+                tstart = SystemClock.elapsedRealtime();
             }
         }
         else if(stepOfExercice == 3) {
@@ -318,9 +322,10 @@ public class CameraActivity extends LiveCameraActivity{
 
     // Method post exercice to do operations
     public void analysePoint(){
+        long endTime = SystemClock.elapsedRealtime();
+        double time = (endTime - tstart) / 1000.0;
         int nombreDeRepetition = 0;
-        float score = 0;
-        float noteDepart = 5, noteFin = 5, duree = 0;
+        float noteDepart = 0, noteFin = 0;
         // Pour chaque position on récupère l'actuelle et la suivante
         // On commence l'itération à 1 et on fini à -1
         for(int inc = 1; inc < getPositions().size() -1; inc++){
@@ -348,10 +353,12 @@ public class CameraActivity extends LiveCameraActivity{
                     nombreDeRepetition++;
                     System.out.println("Point max");
                     // Calcul score position
-                    // TO DO : trouver comment noter le mouvent du haut
-                    noteDepart = noteDepart +
-                            abs(pointActuel[0].x - pointActuel[2].x - pointActuel[4].x) +
-                            abs(pointActuel[1].x - pointActuel[3].x - pointActuel[5].x);
+                    // TO DO : trouver comment noter le mouvement du haut
+                    noteDepart = noteDepart + (abs(pointActuel[0].x - pointActuel[2].x) +
+                            abs(pointActuel[2].x - pointActuel[4].x) +
+                            abs(pointActuel[1].x - pointActuel[3].x) +
+                            abs(pointActuel[3].x - pointActuel[5].x))
+                            / 2;
                 }
             }
             // sinon si mains et coude précédent sont plus haut
@@ -366,18 +373,20 @@ public class CameraActivity extends LiveCameraActivity{
                     // On a un point le plus bas
                     System.out.println("Point minimal");
                     // TO DO : Trouver une formule
-                    noteFin = noteFin +  abs(pointActuel[0].y - pointActuel[2].y) +
+                    noteFin = noteFin +  (abs(pointActuel[0].y - pointActuel[2].y) +
                             abs(pointActuel[1].y - pointActuel[3].y) +
                             abs(pointActuel[2].x - pointActuel[4].x) +
-                            abs(pointActuel[3].x - pointActuel[5].x);
+                            abs(pointActuel[3].x - pointActuel[5].x)) / 2;
                 }
             }
 
         }
-        score = (noteDepart + noteFin) / 2;
+        System.out.println("NOTE DEBUT " + noteDepart + " & NOTE FIN " + noteFin);
         Intent intent = new Intent(CameraActivity.this, Recapitulatif.class);
         intent.putExtra("nombreRepetition", nombreDeRepetition);
-        intent.putExtra("score", score);
+        intent.putExtra("scoreDebut", noteDepart);
+        intent.putExtra("scoreFin", noteFin);
+        intent.putExtra("temps", time);
         startActivity(intent);
         finish();
     }
