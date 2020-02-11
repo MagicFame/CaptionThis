@@ -5,22 +5,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
+
     <LinearLayout
-        android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/blueCaptionThis"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imageView13"
+            android:layout_width="match_parent"
+            android:layout_height="214dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:background="@color/blueCaptionThis"
+            android:backgroundTint="@color/blueCaptionThis"
+            android:backgroundTintMode="src_atop"
+            app:srcCompat="@drawable/logo" />
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:gravity="center"
             android:text="Liste des exercices"
+            android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/lightgray"
             android:textSize="24sp" />
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="239dp">
+            android:layout_height="239dp"
+            app:cardBackgroundColor="@color/blueCaptionThis">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/card_view"
@@ -43,7 +60,8 @@
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="239dp">
+            android:layout_height="239dp"
+            app:cardBackgroundColor="@color/blueCaptionThis">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/card_view1"
@@ -64,7 +82,8 @@
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="239dp">
+            android:layout_height="239dp"
+            app:cardBackgroundColor="@color/blueCaptionThis">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/card_view2"

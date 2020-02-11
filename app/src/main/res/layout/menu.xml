@@ -67,7 +67,6 @@
                         android:id="@+id/textView11"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
                         android:text="Profil"
                         android:textAlignment="textStart"
                         android:textColor="@color/lightgray"
@@ -100,13 +99,12 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/settings" />
+                        app:srcCompat="@drawable/settings_wait" />
 
                     <TextView
                         android:id="@+id/textView12"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
                         android:text="Réglages"
                         android:textAlignment="textStart"
                         android:textColor="@color/lightgray"
