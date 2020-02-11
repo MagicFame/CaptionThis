@@ -17,8 +17,6 @@ public class HomeActivity extends AppCompatActivity {
         //getSupportActionBar().hide();
         u = (User) getIntent().getSerializableExtra("User");
         setContentView(R.layout.menu);
-        String text = ((TextView) findViewById(R.id.textView3)).getText().toString();
-        ((TextView) findViewById(R.id.textView3)).setText(text + " " + u.getUsername());
 
         addActionButton();
     }
