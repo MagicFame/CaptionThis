@@ -67,6 +67,7 @@
                         android:id="@+id/textView11"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/uniform"
                         android:text="Profil"
                         android:textAlignment="textStart"
                         android:textColor="@color/lightgray"
@@ -99,12 +100,13 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/settings_wait" />
+                        app:srcCompat="@drawable/settings" />
 
                     <TextView
                         android:id="@+id/textView12"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/uniform"
                         android:text="Réglages"
                         android:textAlignment="textStart"
                         android:textColor="@color/lightgray"
@@ -145,13 +147,14 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintVertical_bias="0.49"
-                        app:srcCompat="@drawable/seance" />
+                        app:srcCompat="@drawable/seance_wait" />
 
                     <TextView
                         android:id="@+id/textView10"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
+                        android:fontFamily="@font/uniform"
                         android:text="Historique"
                         android:textAlignment="center"
                         android:textColor="@color/lightgray"
@@ -191,8 +194,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Exercice"
-                        android:textColor="#FFFFFF"
+                        android:fontFamily="@font/uniform"
+                        android:text="Exercices"
+                        android:textColor="@color/lightgray"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />

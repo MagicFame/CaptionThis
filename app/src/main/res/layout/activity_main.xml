@@ -6,15 +6,33 @@
 
     <FrameLayout
         android:id="@+id/camera_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="100dp"
+            android:elevation="3dp"
+            android:fontFamily="@font/uniform"
+            android:text="TextView"
+            android:textAlignment="center"
+            android:textColor="#009688"
+            android:textSize="18sp"
+            android:visibility="invisible" />
 
         <Button
             android:id="@+id/end_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="210dp"
+            android:layout_height="44dp"
             android:layout_gravity="bottom|center"
             android:layout_marginBottom="@dimen/margin_md"
+            android:background="@drawable/button_background"
+            android:fontFamily="@font/uniform"
             android:text="Terminer"
             android:visibility="invisible" />
 

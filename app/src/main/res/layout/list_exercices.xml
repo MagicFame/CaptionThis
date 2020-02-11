@@ -27,12 +27,13 @@
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fontFamily="@font/uniform"
             android:gravity="center"
             android:text="Liste des exercices"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textColor="@color/lightgray"
-            android:textSize="24sp" />
+            android:textSize="18sp" />
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"

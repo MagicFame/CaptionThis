@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +67,9 @@ public class CameraActivity extends LiveCameraActivity{
                     textToSpeech.setLanguage(Locale.FRANCE);
                     String toSpeak = "Veuillez vous placer devant la caméra";
                     textToSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null, null);
+                    TextView text = findViewById(R.id.textView13);
+                    text.setText("Veuillez vous placer devant la caméra");
+                    text.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -226,6 +230,8 @@ public class CameraActivity extends LiveCameraActivity{
             if (var.getName().compareTo("rightAnkle") == 0) piedDroit = var;
         }
         if(stepOfExercice == 0){
+            TextView text = findViewById(R.id.textView13);
+            text.setText("Bievenue sur l'exercice de pompes");
             String toSpeak = "Bievenue sur l'exercice de pompes";
             textToSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null, null);
             stepOfExercice = 1;
@@ -241,6 +247,8 @@ public class CameraActivity extends LiveCameraActivity{
                     isDefineAndGoodScore(rightShoulder, 0.5) &&
                     isDefineAndGoodScore(coudeDroit, 0.5)
                    ){
+                TextView text = findViewById(R.id.textView13);
+                text.setText("Prenez la position de départ");
                 String toSpeak = "Prenez la position de départ";
                 textToSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null, null);
                 stepOfExercice = 2;
@@ -268,9 +276,11 @@ public class CameraActivity extends LiveCameraActivity{
             if (var.getName().compareTo("rightWrist") == 0) poignetDroit = var;
 
             if(stepOfExercice == 0){
-            String toSpeak = "Bievenue sur l'exercice de développé épaules";
-            textToSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null, null);
-            stepOfExercice = 1;
+                TextView text = findViewById(R.id.textView13);
+                text.setText("Bievenue sur l'exercice de développé épaules");
+                String toSpeak = "Bievenue sur l'exercice de développé épaules";
+                textToSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null, null);
+                stepOfExercice = 1;
             }
         }
         if(stepOfExercice == 1){
@@ -281,6 +291,8 @@ public class CameraActivity extends LiveCameraActivity{
                     isDefineAndGoodScore(poignetDroit,0.5)&&
                     isDefineAndGoodScore(poignetGauche, 0.5)
             ){
+                TextView text = findViewById(R.id.textView13);
+                text.setText("Prenez la position de départ");
                 String toSpeak = "Prenez la position de départ";
                 textToSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null, null);
                 stepOfExercice = 2;
@@ -292,9 +304,12 @@ public class CameraActivity extends LiveCameraActivity{
                     compareTwoPoints(leftShoulder.getPosition(), coudeGauche.getPosition(), 1) &&
                     compareTwoPoints(poignetGauche.getPosition() , coudeGauche.getPosition(), 2) &&
                     compareTwoPoints(poignetDroit.getPosition() , coudeDroit.getPosition(), 2)){
+                TextView text = findViewById(R.id.textView13);
+                text.setText("Début de l'exercice");
                 String toSpeak = "Début de l'exercice";
                 textToSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null, null);
                 stepOfExercice = 3;
+                // Lancement du chrono
                 tstart = SystemClock.elapsedRealtime();
             }
         }
